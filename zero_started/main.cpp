@@ -5,5 +5,7 @@
 int main(int argc, char* argv)
 {
 	zero_started();
+	Garren gay_lun;
+
 	return 0;
 }

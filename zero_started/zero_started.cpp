@@ -5,8 +5,6 @@
 #include <thread>
 #include <string>
 
-#include <vector>
-#include <map>
 #include <list>
 #include <unordered_map>
 #include <unordered_set>
@@ -14,11 +12,13 @@
 #include <fstream>
 #include <algorithm>
 #include <memory>
-#include <chrono>
 #include <atomic>
 #include <future>
 #include <condition_variable>
 #include <mutex>
+
+#include <ctime>
+#include <iomanip>
 
 static void hello()
 {
@@ -37,21 +37,44 @@ static void hello2(const std::string& str)
 
 Garren::Garren()
 {
-
+	task_running_ = true;
+	for (int i = 0; i < task_count_; i++) {
+		thread_vec_.push_back(std::make_shared<std::thread>(&Garren::threadWorker, this, i));
+	}
 }
 
 Garren::~Garren()
 {
-	if (task_running_) {
-		for (auto it = thread_vec_.cbegin(); it != thread_vec_.cend(); ++it) {
-		}
+	stop();
+}
 
+void Garren::stop()
+{
+	if (task_running_) {
+		for (auto it = thread_vec_.begin(); it != thread_vec_.end(); ++it) {
+			auto v = *it;
+			if (v->joinable()) {
+				v->join();
+			}
+		}
 	}
 }
 
 void Garren::threadWorker(const int key)
 {
+	std::this_thread::sleep_for(std::chrono::seconds(2));
 
+	using std::chrono::system_clock;
+	std::time_t tt = system_clock::to_time_t(system_clock::now());
+
+	struct std::tm* ptm = std::localtime(&tt);
+	std::cout << "Current time: " << std::put_time(ptm, "%X") << '\n';
+
+	std::cout << "Waiting for the next minute to begin...\n";
+	++ptm->tm_min; ptm->tm_sec = 0;
+	std::this_thread::sleep_until(system_clock::from_time_t(mktime(ptm)));
+
+	std::cout << std::put_time(ptm, "%X") << " reached!\n";
 }
 
 class Zed

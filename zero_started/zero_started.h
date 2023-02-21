@@ -8,6 +8,7 @@
 #include <vector>
 #include <map>
 #include <thread>
+#include <chrono>
 
 int zero_started();
 
@@ -21,6 +22,8 @@ public:
 
 	void threadWorker(const int key);
 private:
+	void stop();
+private:
 	bool task_running_ = false;
 	const int task_count_ = 1024;
 
@@ -29,4 +32,3 @@ private:
 	ThreadVec thread_vec_;
 };
 
-// TODO: 在此处引用程序需要的其他标头。
