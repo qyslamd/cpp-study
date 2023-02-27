@@ -7,3 +7,4 @@ project ("CppStudy")
 
 # 包含子项目。
 add_subdirectory ("zero_started")
+add_subdirectory ("thread_test1")
