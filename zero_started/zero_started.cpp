@@ -16,6 +16,7 @@
 #include <future>
 #include <condition_variable>
 #include <mutex>
+#include <functional>
 
 #include <ctime>
 #include <iomanip>
@@ -85,6 +86,12 @@ public:
 		std::cout << "无形之刃，最为致命！" << " thread id:";
 		std::cout << std::this_thread::get_id() << std::endl;
 	}
+
+	void niubi(int a)
+	{
+		std::cout << "均衡，是愚者的导师 原文链接：http://cnhbtc.com/yxlmyxtc/yxlmyxtc1726.html！" << a << " thread id:";
+		std::cout << std::this_thread::get_id() << std::endl;
+	}
 };
 
 int zero_started()
@@ -108,5 +115,20 @@ int zero_started()
 	if (thread3.joinable()) {
 		thread3.join();
 	}
+
+	auto func1 = std::bind(&Zed::niubi, zed, std::placeholders::_1);
+	std::thread thread4(func1, 5);
+
+	auto func2 = std::bind(&Zed::niubi, &zed, std::placeholders::_1);
+	std::thread thread5(func2, 6);
+
+	if (thread4.joinable()) {
+		thread4.join();
+	}
+
+	if (thread5.joinable()) {
+		thread5.join();
+	}
+
 	return 0;
 }

@@ -9,8 +9,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
 FILE(GLOB ALL_SOURCES "*.cpp" "*.cxx" "*.cc")
 FILE(GLOB ALL_HEADERS "*.h" "*.hpp" )
 
-set(ALL_SRCS 
-${ALL_SOURCES}
-${ALL_HEADERS})
+set(ALL_SRCS  ${ALL_SOURCES} ${ALL_HEADERS} )
 
 add_executable(thread_test1 ${ALL_SRCS})
