@@ -6,5 +6,4 @@ cmake_minimum_required (VERSION 3.8)
 project ("CppStudy")
 
 # 包含子项目。
-add_subdirectory ("zero_started")
-add_subdirectory ("thread_test1")
+add_subdirectory (zero_started)
