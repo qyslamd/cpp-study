@@ -3,10 +3,11 @@ set(target_name interview_questions)
 
 set(source_files 
 main.cpp
+utils.cpp
 BasicAndClassic.cpp)
 
 set(header_files 
-utils.hpp
+utils.h
 BasicAndClassic.h)
 
 add_executable(${target_name} ${source_files} ${header_files})

@@ -1,40 +1,28 @@
+#ifdef _WINDOWS
+#include<Windows.h>
+#endif
 #include "BasicAndClassic.h"
 #include <sstream>
 #include <iostream>
-#include <cstdio>
 
 using namespace std;
-namespace BasicAndClassic {
 
-void BasicAndClassic::doQuestion(int argc, char* argv[]) {
-  while (true) {
-    Category cate;
-    cout << "Choose your difficulty:" << endl
-         << "\t" << CateToString(Category::Return, ": ") << endl
-         << "\t" << CateToString(Category::MemDistribution, ": ") << endl;
-    cin >> cate;
-    cout << "You choosed:" << cate << endl;
-    if (cate == Category::Return) {
-      cout << "Function will return" << endl;
-      return;
-    }
-    execute(cate);
-  }
+void BasicAndClassic::Memory::operator()() {
+  std::vector<op::Question> ops{
+      {"MemoryDistribute", "C/C++内存分布", [this] { memDist(); }},
+      {"malloc() and operator new", "malloc和new的区别",
+       [this] { mallocNewDiff(); }}};
+  op::Category factory("Choose a question:", ops);
+  factory.addGoBackOp();
+  factory.execute();
 }
 
-void BasicAndClassic::execute(Category cate) {
-  switch (cate) {
-    case BasicAndClassic::Category::MemDistribution:
-      Memory::desc();
-      break;
-    default:
-      break;
-  }
-}
-
-void Memory::desc() {
+void BasicAndClassic::Memory::memDist() {
   std::cout << "Q:在C/C++中，内存分配有哪些类型？" << std::endl;
-  getchar();
+#ifdef _WINDOWS
+  system("pause");
+#endif  // _WINDOWS
+
   std::stringstream ss;
   ss << "A:" << std::endl;
   ss << "1、[堆]" << std::endl;
@@ -53,4 +41,16 @@ void Memory::desc() {
 
   std::cout << ss.str() << std::endl;
 }
-}  // namespace BasicAndClassic
+
+void BasicAndClassic::Memory::mallocNewDiff() {
+  std::cout << "Q:malloc 和 new 有什么区别？" << std::endl;
+#ifdef _WINDOWS
+  system("pause");
+#endif  // _WINDOWS
+
+  std::stringstream ss;
+  ss << "A:" << std::endl;
+  ss << "malloc 是C语言库函数，new是C++中的关键字，也是一个可以被重载的操作符"
+     << std::endl;
+  std::cout << ss.str() << std::endl;
+}
