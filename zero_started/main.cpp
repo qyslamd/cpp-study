@@ -2,18 +2,19 @@
 #include <sstream>
 
 #include "zero_started.hpp"
+#include "thread_usage.hpp"
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
   std::stringstream ss;
-  ss << "In function:" << __FUNCTION__;
-  ss << argc << "parameters are passed." << std::endl;
-  ss << "they are:" << std::endl;
+  ss << "command line parameters: " << std::endl;
   for (int i = 0; i < argc; ++i) {
-    ss << "\t" << argv[i] << std::endl;
+    ss << "\targv[" << i << "]: " << argv[i] << std::endl;
   }
   std::cout << ss.str() << std::endl;
 
-  zero_started::test_thread(argc, argv);
+  cpp_study::zero_started::test_promise(argc, argv);
+
+  cpp_study::thread_usage::std_thread::test_code();
 
   return 0;
 }

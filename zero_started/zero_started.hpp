@@ -1,13 +1,10 @@
-﻿// zero_started.h: 标准系统包含文件的包含文件
-// 或项目特定的包含文件。
-
-#pragma once
+﻿#pragma once
 #include <chrono>
 #include <future>
 #include <iostream>
 #include <thread>
 
-namespace zero_started {
+namespace cpp_study::zero_started {
 struct Foo {
   Foo(int num) : num_(num) {}
   void print_add(int i) const { std::cout << num_ + i << '\n'; }
@@ -78,25 +75,20 @@ int test_functional([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) {
   return 0;
 }
 
-void test_thread([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) {
-  std::promise<int> promise1;
-  std::future<int> fu = promise1.get_future();
+void test_promise([[maybe_unused]] int argc, [[maybe_unused]] char* argv[]) {
+  std::promise<int> promise;
+  std::future<int> fu = promise.get_future();
 
-  auto thread1 = [](std::promise<int>& promise) {
+  auto set_value_promise_func = [](std::promise<int>& promise) {
     std::this_thread::sleep_for(std::chrono::seconds(2));
     // do some stuff.
     promise.set_value(99);
   };
 
-  auto thread2 = [](std::future<int>& future) {
-    auto value = future.get();
-    std::cout << "value is: " << value << std::endl;
-  };
-
-  std::thread td1(thread1, std::ref(promise1));
-  std::thread td2(thread2, std::ref(fu));
-  td1.join();
-  td2.join();
+  std::thread thread1(set_value_promise_func, std::ref(promise));
+  thread1.join();
+  auto value = fu.get();
+  std::cout << "value is: " << value << std::endl;
 }
 
-}  // namespace zero_started
+}  // namespace  cpp_study::zero_started
