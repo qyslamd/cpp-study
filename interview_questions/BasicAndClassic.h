@@ -18,4 +18,9 @@ struct Memory {
   void mallocNewDiff();
 };
 
+class StaticKeyword {
+ public:
+  static void askYou();
+};
+
 }  // namespace BasicAndClassic

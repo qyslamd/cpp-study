@@ -11,7 +11,8 @@ void BasicAndClassic::Memory::operator()() {
   std::vector<op::Question> ops{
       {"MemoryDistribute", "C/C++内存分布", [this] { memDist(); }},
       {"malloc() and operator new", "malloc和new的区别",
-       [this] { mallocNewDiff(); }}};
+       [this] { mallocNewDiff(); }},
+      {"The 'static' keyword", "描述下static关键字的作用", StaticKeyword::askYou}};
   op::Category factory("Choose a question:", ops);
   factory.addGoBackOp();
   factory.execute();
@@ -51,6 +52,19 @@ void BasicAndClassic::Memory::mallocNewDiff() {
   std::stringstream ss;
   ss << "A:" << std::endl;
   ss << "malloc 是C语言库函数，new是C++中的关键字，也是一个可以被重载的操作符"
+     << std::endl;
+  std::cout << ss.str() << std::endl;
+}
+
+void BasicAndClassic::StaticKeyword::askYou() {
+  std::cout << "Q:static how to use it？" << std::endl;
+#ifdef _WINDOWS
+  system("pause");
+#endif  // _WINDOWS
+
+  std::stringstream ss;
+  ss << "A:" << std::endl;
+  ss << "\t1. modification a function."
      << std::endl;
   std::cout << ss.str() << std::endl;
 }
