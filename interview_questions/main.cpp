@@ -9,12 +9,9 @@ int main(int argc, char* argv[]) {
   using namespace std;
   cout << "*************** Welcome to my interview questsions ***************"
        << endl;
-  std::vector<op::Question> ops{{"BasicAndClassic", "基础且经典的面试题",
-                                  [] {
-                                    BasicAndClassic::Memory mem;
-                                    mem();
-                                  }},
-                                 {"Pointer", "指针相关", nullptr}};
+  std::vector<op::Question> ops{
+      {"BasicAndClassic", "基础且经典的面试题", BasicAndClassic::execute},
+      {"Pointer", "指针相关", nullptr}};
   op::Category factory("Choose a category:", ops);
   factory.execute();
   return 0;

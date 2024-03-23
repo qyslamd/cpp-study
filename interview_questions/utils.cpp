@@ -35,7 +35,7 @@ void Category::execute() {
       continue;
     }
     if (type < operations.size()) {
-      if (auto const& func = operations.at(type).opFunc) {
+      if (auto const& func = operations.at(type).answerFunc) {
         func();
       }
     }

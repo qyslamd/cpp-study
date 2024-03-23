@@ -7,12 +7,12 @@
 
 using namespace std;
 
-void BasicAndClassic::Memory::operator()() {
+void BasicAndClassic::execute() {
   std::vector<op::Question> ops{
-      {"MemoryDistribute", "C/C++内存分布", [this] { memDist(); }},
-      {"malloc() and operator new", "malloc和new的区别",
-       [this] { mallocNewDiff(); }},
-      {"The 'static' keyword", "描述下static关键字的作用", StaticKeyword::askYou}};
+      {"MemoryDistribute", "C/C++内存分布", Memory::memDist},
+      {"malloc() and operator new", "malloc和new的区别", Memory::mallocNewDiff},
+      {"The 'static' keyword", "描述下static关键字的作用", StaticKeyword()},
+      {"What's Rvalue reference in cpp11?", "在C++11中什么叫做右值引用？", CppCopyAssignDestoy::lRef_rRef}};
   op::Category factory("Choose a question:", ops);
   factory.addGoBackOp();
   factory.execute();
@@ -56,15 +56,58 @@ void BasicAndClassic::Memory::mallocNewDiff() {
   std::cout << ss.str() << std::endl;
 }
 
-void BasicAndClassic::StaticKeyword::askYou() {
-  std::cout << "Q:static how to use it？" << std::endl;
+void BasicAndClassic::StaticKeyword::operator()() {
+  std::cout << "Q:static关键字在C++中有哪些用法？" << std::endl;
 #ifdef _WINDOWS
   system("pause");
 #endif  // _WINDOWS
 
   std::stringstream ss;
   ss << "A:" << std::endl;
-  ss << "\t1. modification a function."
+  ss << "1. 修饰全局变量" << std::endl;
+  ss << "\tstatic 修饰的全局变量表示只可在文件内可见" << std::endl;
+  ss << "2. 修饰局部变量" << std::endl;
+  ss << "\t当static修饰局部变量时，该变量只在函数内部可见，且生命周期和应用一样"
+        "长。且只会被定义一次。"
      << std::endl;
+  ss << "3. 修饰类的成员变量" << std::endl;
+  ss << "\t修饰类的成员变量的时候，会受到public "
+        "protected和private的影响。该变量属于类本身，和类的对象无关。使用类名::"
+        "变量名访问。且申明和定义需要分开。"
+     << std::endl;
+  ss << "4. 修饰普通函数" << std::endl;
+  ss << "\t修饰函数表示隐藏。可访问性限定为文件内部" << std::endl;
+  ss << "5. 修饰类的成员函数" << std::endl;
+  ss << "\t类似于修饰类的成员变量。" << std::endl;
+  ss << "!!!特别注意:如果将一个static "
+        "全局变量在头文件中申明，那么#"
+        "include该头文件的其它地方都能访问到这个变量，但是彼此之间独立"
+     << std::endl;
+  std::cout << ss.str() << std::endl;
+}
+
+void BasicAndClassic::CppCopyAssignDestoy::lRef_rRef() {
+  std::cout << "Q:什么叫做右值引用？" << std::endl;
+#ifdef _WINDOWS
+  system("pause");
+#endif  // _WINDOWS
+  std::stringstream ss;
+  ss << "右值引用并非'右'，而是判断表达式是否可以取地址来修改判断是否是右值？" << std::endl;
+  ss << "理论上说没有傻逼会直接问这个。但是下边的Demo可以看一眼:" << std::endl;
+  ss << R"(
+#include <iostream>
+#include <string>
+int main(){
+    std::string s1 = "Test";
+    //std::string && r1 = s1; // error,can't bind to lvalue.
+
+    const std::string &r2 = s1 + s1;
+    //r2 += "Test"; // error
+    std::string && r3 = s1 + s1;
+    r3 += "test";   // okay:can be modified through reference to non-const.
+    std::cout << r3 << std::endl;
+})"
+     << std::endl;
+
   std::cout << ss.str() << std::endl;
 }

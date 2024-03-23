@@ -7,7 +7,7 @@ namespace op {
 struct Question {
   std::string desc;
   std::string zh_CN_desc;
-  std::function<void()> opFunc;
+  std::function<void()> answerFunc;
 };
 
 class Category {
