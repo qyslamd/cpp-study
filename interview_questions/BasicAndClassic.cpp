@@ -12,7 +12,12 @@ void BasicAndClassic::execute() {
       {"MemoryDistribute", "C/C++内存分布", Memory::memDist},
       {"malloc() and operator new", "malloc和new的区别", Memory::mallocNewDiff},
       {"The 'static' keyword", "描述下static关键字的作用", StaticKeyword()},
-      {"What's Rvalue reference in cpp11?", "在C++11中什么叫做右值引用？", CppCopyAssignDestoy::lRef_rRef}};
+      {"What's Rvalue reference in cpp11?", "在C++11中什么叫做右值引用？",
+       CppCopyAssignDestoy::lRef_rRef},
+      {"What's rules of three/five?", "C++中的3/5法则以及0法则",
+       CppCopyAssignDestoy::_3_5_rules},
+      {"Describe the explicit type conversion keyword in C++",
+       "描述C++中的显式类型转换关键字", CastInCpp::describeCastInCpp}};
   op::Category factory("Choose a question:", ops);
   factory.addGoBackOp();
   factory.execute();
@@ -109,5 +114,166 @@ int main(){
 })"
      << std::endl;
 
+  std::cout << ss.str() << std::endl;
+}
+
+void BasicAndClassic::CppCopyAssignDestoy::_3_5_rules() {
+  std::cout << "Q：在C++中什么叫做3/5法则？" << std::endl;
+  #ifdef _WINDOWS
+  system("pause");
+  #endif
+
+  std::stringstream ss;
+  ss << "A:"
+        "在一个类中，有三个基本操作可以控制类的拷贝操作：拷贝构造函数、拷贝赋值"
+        "运算符和析构函数。这称之为三法则。在新版的C++"
+        "11标准中，引入了右值引用。还可以定义一个移动构造函数和一个移动赋值运算"
+        "符。0法则指的是当用到这些操作的时候，如果用户未显式的定义这些操作，那么编译器将自动生成。";
+  ss << "下边是一个常见的定义了5个操作的类的示例：" << std::endl;
+  ss << R"(
+  Foo(const Foo& other) {
+    // copy constructor.
+    // If you don't write it explicitly, the compiler will automatically create
+    // a version that does nothing
+    std::cout << "Copy constructor was called!" << std::endl;
+
+    this->size = other.size;
+
+    // shallow copy.
+    this->buf = other.buf;
+
+    // deep copy.
+    this->buf = new char[other.size];
+    memcpy(this->buf, other.buf, other.size);
+  }
+
+  Foo& operator=(const Foo& other) {
+    // Copy assignment operator.
+    std::cout << "Copy assign operator was called!" << std::endl;
+
+    if (this != &other) {
+      delete this->buf;
+      this->size = other.size;
+      this->buf = new char[other.size];
+      memcpy(this->buf, other.buf, other.size);
+    }
+
+    return *this;
+  }
+
+  Foo(Foo&& other) noexcept {
+    // Move constructor
+    std::cout << "Move constructor was called!" << std::endl;
+    this->size = other.size;
+    this->buf = other.buf;
+
+    other.size = 0;
+    other.buf = nullptr;
+  }
+
+  Foo& operator=(Foo&& other) noexcept {
+    // Move assignment operator
+    std::cout << "Move assignment operator was called!" << std::endl;
+
+    if (this != &other) {
+      delete this->buf;
+      this->size = other.size;
+      this->buf = other.buf;
+
+      other.size = 0;
+      other.buf = nullptr;
+    }
+
+    return *this;
+  }
+};
+)";
+  ss << std::endl;
+
+  std::cout << ss.str() << std::endl;
+}
+
+class Foo {
+ private:
+  size_t size;
+  char* buf;
+
+ public:
+  Foo() : size(0), buf(new char(size)) {
+    // default constructor.
+    // If you don't write it explicitly, the compiler will automatically create
+    // a version that does nothing
+    std::cout << "Default constructor was called!" << std::endl;
+  }
+
+  ~Foo() {
+    std::cout << "Desctructor." << std::endl;
+    delete[] buf;
+  }
+
+  Foo(const Foo& other) {
+    // copy constructor.
+    // If you don't write it explicitly, the compiler will automatically create
+    // a version that does nothing
+    std::cout << "Copy constructor was called!" << std::endl;
+
+    this->size = other.size;
+
+    // shallow copy.
+    this->buf = other.buf;
+
+    // deep copy.
+    this->buf = new char[other.size];
+    memcpy(this->buf, other.buf, other.size);
+  }
+
+  Foo& operator=(const Foo& other) {
+    // Copy assignment operator.
+    std::cout << "Copy assign operator was called!" << std::endl;
+
+    if (this != &other) {
+      delete this->buf;
+      this->size = other.size;
+      this->buf = new char[other.size];
+      memcpy(this->buf, other.buf, other.size);
+    }
+
+    return *this;
+  }
+
+  Foo(Foo&& other) noexcept {
+    // Move constructor
+    std::cout << "Move constructor was called!" << std::endl;
+    this->size = other.size;
+    this->buf = other.buf;
+
+    other.size = 0;
+    other.buf = nullptr;
+  }
+
+  Foo& operator=(Foo&& other) noexcept {
+    // Move assignment operator
+    std::cout << "Move assignment operator was called!" << std::endl;
+
+    if (this != &other) {
+      delete this->buf;
+      this->size = other.size;
+      this->buf = other.buf;
+
+      other.size = 0;
+      other.buf = nullptr;
+    }
+
+    return *this;
+  }
+};
+
+auto BasicAndClassic::CastInCpp::describeCastInCpp() -> void {
+  std::cout << "Q：阐述一下在C++中有哪些类型转换？" << std::endl;
+#ifdef _WINDOWS
+  system("pause");
+#endif
+
+  std::stringstream ss;
   std::cout << ss.str() << std::endl;
 }

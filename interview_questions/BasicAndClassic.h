@@ -9,6 +9,8 @@
 #include "utils.h"
 
 namespace BasicAndClassic {
+void execute();
+
 struct Memory {
   static void memDist();
   static void mallocNewDiff();
@@ -23,6 +25,8 @@ struct CppCopyAssignDestoy {
   static void _3_5_rules();
 };
 
-void execute();
+struct CastInCpp {
+  static auto describeCastInCpp() -> void;
+};
 
 }  // namespace BasicAndClassic
