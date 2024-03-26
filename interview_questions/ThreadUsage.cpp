@@ -10,6 +10,8 @@
 #include <algorithm>
 #include <mutex>
 
+#include "thread_pool.hpp"
+
 void ThreadUsage::execute() {
   using opList = std::vector<op::Question>;
   opList ops{
