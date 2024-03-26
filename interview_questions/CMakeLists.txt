@@ -5,11 +5,13 @@ set(source_files
 main.cpp
 utils.cpp
 BasicAndClassic.cpp
-ThreadUsage.cpp)
+ThreadUsage.cpp
+thread_pool.cpp)
 
 set(header_files 
 utils.h
 BasicAndClassic.h
-ThreadUsage.h)
+ThreadUsage.h
+thread_pool.hpp)
 
 add_executable(${target_name} ${source_files} ${header_files})
