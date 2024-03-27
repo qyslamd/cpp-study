@@ -11,7 +11,8 @@ set(all_srcs
 	thread_usage/ThreadUsage.cpp
 	thread_usage/ThreadUsage.hpp
 	design_pattern/DesignPattern.cpp
-	design_pattern/DesignPattern.h)
+	design_pattern/DesignPattern.h
+	design_pattern/creational_patterns/abstract_factory.hpp)
 
 message("sb " + ${all_srcs})
 

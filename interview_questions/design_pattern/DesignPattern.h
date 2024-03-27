@@ -4,6 +4,10 @@
 #include <string>
 
 namespace design_patterns {
+
+/*
+ * see https://refactoringguru.cn/design-patterns/cpp
+ */
 void execute();
 
 struct SOLID {
@@ -37,6 +41,14 @@ struct SOLID {
   /// “¿¿µµπ÷√/◊¢»Î
   /// </summary>
   static std::string DI();
+};
+
+struct CreationalPatterns {
+  static auto abstractFactory() -> void;
+  static auto factoryMethod() -> void;
+  static auto builder() -> void;
+  static auto prototype() -> void;
+  static auto singleton() -> void;
 };
 
 }  // namespace design_patterns

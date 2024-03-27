@@ -4,10 +4,16 @@
 #include <vector>
 #include <sstream>
 
+#include "creational_patterns/abstract_factory.hpp"
+
 void design_patterns::execute() {
-  std::vector<op::Question> ops{{"What's SOLID principles?",
-                                 "设计模式的五大原则是什么？",
-                                 SOLID::description}};
+  std::vector<op::Question> ops{
+      {"What's SOLID principles?", "设计模式的五大原则是什么？",
+       SOLID::description},
+      {"Creational Patterns --- Asbtract Factory", "创建型模式之抽象工厂",
+       CreationalPatterns::abstractFactory},
+      {"Creational Patterns --- Factory Method", "创建型模式之工厂方法",
+       CreationalPatterns::factoryMethod}};
   op::Category factory("输入一个数字，选择设计模式相关的知识点并执行它：", ops);
   factory.addGoBackOp();
   factory.execute();
@@ -75,3 +81,9 @@ std::string design_patterns::SOLID::DI() {
 
   return ss.str();
 }
+
+auto design_patterns::CreationalPatterns::abstractFactory() -> void {
+  design_patterns::creational_patterns::client();
+}
+
+auto design_patterns::CreationalPatterns::factoryMethod() -> void {}
