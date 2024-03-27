@@ -48,11 +48,7 @@ struct SOLID {
 };
 
 struct CreationalPatterns {
-  static auto abstractFactory() -> void;
-  static auto factoryMethod() -> void;
-  static auto builder() -> void;
-  static auto prototype() -> void;
-  static auto singleton() -> void;
+  static auto showCategory() -> void;
 };
 
 }  // namespace design_patterns
