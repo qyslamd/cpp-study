@@ -6,7 +6,11 @@
 namespace design_patterns {
 
 /*
+ * 设计模式与C++
  * see https://refactoringguru.cn/design-patterns/cpp
+ *
+ * see
+ * https://cpp-design-patterns.readthedocs.io/en/latest/principles.html#solid
  */
 void execute();
 
