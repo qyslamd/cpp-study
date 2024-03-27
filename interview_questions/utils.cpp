@@ -19,10 +19,6 @@ void Category::addGoBackOp() {
                      : operations.insert(operations.begin() + 1, op);
 }
 
-std::string Category::op2Str(int cmd, const Question& op) {
-  return std::to_string(cmd) + ": " + op.desc + "(" + op.zh_CN_desc + ")";
-}
-
 void Category::execute() {
   while (running) {
     std::cout << title << std::endl;
@@ -40,9 +36,5 @@ void Category::execute() {
       }
     }
   }
-}
-
-void Category::quit() {
-  running = false;
 }
 }  // namespace op

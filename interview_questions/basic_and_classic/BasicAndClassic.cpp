@@ -4,10 +4,11 @@
 #include "BasicAndClassic.h"
 #include <sstream>
 #include <iostream>
+#include "utils.h"
 
 using namespace std;
 
-void BasicAndClassic::execute() {
+void basic_and_classic::execute() {
   std::vector<op::Question> ops{
       {"MemoryDistribute", "C/C++内存分布", Memory::memDist},
       {"malloc() and operator new", "malloc和new的区别", Memory::mallocNewDiff},
@@ -18,12 +19,12 @@ void BasicAndClassic::execute() {
        CppCopyAssignDestoy::_3_5_rules},
       {"Describe the explicit type conversion keyword in C++",
        "描述C++中的显式类型转换关键字", CastInCpp::describeCastInCpp}};
-  op::Category factory("Choose a question:", ops);
+  op::Category factory("选择一个基础的问题或者命令，数字代表执行它", ops);
   factory.addGoBackOp();
   factory.execute();
 }
 
-void BasicAndClassic::Memory::memDist() {
+void basic_and_classic::Memory::memDist() {
   std::cout << "Q:在C/C++中，内存分配有哪些类型？" << std::endl;
 #ifdef _WINDOWS
   system("pause");
@@ -48,7 +49,7 @@ void BasicAndClassic::Memory::memDist() {
   std::cout << ss.str() << std::endl;
 }
 
-void BasicAndClassic::Memory::mallocNewDiff() {
+void basic_and_classic::Memory::mallocNewDiff() {
   std::cout << "Q:malloc 和 new 有什么区别？" << std::endl;
 #ifdef _WINDOWS
   system("pause");
@@ -61,7 +62,7 @@ void BasicAndClassic::Memory::mallocNewDiff() {
   std::cout << ss.str() << std::endl;
 }
 
-void BasicAndClassic::StaticKeyword::operator()() {
+void basic_and_classic::StaticKeyword::operator()() {
   std::cout << "Q:static关键字在C++中有哪些用法？" << std::endl;
 #ifdef _WINDOWS
   system("pause");
@@ -91,7 +92,7 @@ void BasicAndClassic::StaticKeyword::operator()() {
   std::cout << ss.str() << std::endl;
 }
 
-void BasicAndClassic::CppCopyAssignDestoy::lRef_rRef() {
+void basic_and_classic::CppCopyAssignDestoy::lRef_rRef() {
   std::cout << "Q:什么叫做右值引用？" << std::endl;
 #ifdef _WINDOWS
   system("pause");
@@ -117,7 +118,7 @@ int main(){
   std::cout << ss.str() << std::endl;
 }
 
-void BasicAndClassic::CppCopyAssignDestoy::_3_5_rules() {
+void basic_and_classic::CppCopyAssignDestoy::_3_5_rules() {
   std::cout << "Q：在C++中什么叫做3/5法则？" << std::endl;
   #ifdef _WINDOWS
   system("pause");
@@ -268,7 +269,7 @@ class Foo {
   }
 };
 
-auto BasicAndClassic::CastInCpp::describeCastInCpp() -> void {
+auto basic_and_classic::CastInCpp::describeCastInCpp() -> void {
   std::cout << "Q：阐述一下在C++中有哪些类型转换？" << std::endl;
 #ifdef _WINDOWS
   system("pause");

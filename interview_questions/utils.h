@@ -1,6 +1,6 @@
 #pragma once
-#include <iostream>
 #include <string>
+#include <iostream>
 #include <functional>
 
 namespace op {
@@ -12,15 +12,18 @@ struct Question {
 
 class Category {
  public:
-  Category(const std::string &desc, const std::vector<Question>& ops);
+  Category(const std::string& desc, const std::vector<Question>& ops);
 
   void addQuestion(const Question& op);
   void addGoBackOp();
   void execute();
-  void quit();
+  inline void quit() { running = false; }
 
-  private:
-  std::string op2Str(int cmd, const Question& op);
+ private:
+  inline std::string op2Str(int cmd, const Question& op) {
+    return std::to_string(cmd) + ": " + op.desc + "(" + op.zh_CN_desc + ")";
+  }
+
  private:
   std::string title;
   bool running;

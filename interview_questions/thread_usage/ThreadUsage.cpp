@@ -1,41 +1,36 @@
-#include "ThreadUsage.h"
+#include "ThreadUsage.hpp"
 #include "utils.h"
 
-#include <thread>
 #include <chrono>
-#include <future>
 #include <numeric>
-#include <functional>
 #include <cmath>
 #include <algorithm>
-#include <mutex>
+#include <sstream>
 
-#include "thread_pool.hpp"
-
-void ThreadUsage::execute() {
+void thread_usage::execute() {
   using opList = std::vector<op::Question>;
   opList ops{
-      {"Basic usage of standard library threads", "std::thread的基础用法",
+      {"std::thread", "std::thread的基础用法",
        BasicThread::thread_demo},
-      {"std::mutex usage", "std::mutext的基本用法",
+      {"std::mutex", "std::mutext的基本用法",
        BasicThread::mutex_lock_demo},
       {"std::condition_variable", "std::condition_variable用法示例",
        BasicThread::condition_variable_demo},
-      {"std::promise usage", "std::promise的示例用法",
+      {"std::promise", "std::promise的示例用法",
        BasicThread::promise_demo},
-      {"std::packaged_task usage", "std::packaged_task的用法示例",
+      {"std::packaged_task", "std::packaged_task的用法示例",
        BasicThread::packaged_task_demo},
-      {"std::async usage", "std::async的用法示例", BasicThread::async_demo},
-      {"std::call_once usage", "std::call_once的用法示例",
+      {"std::async", "std::async的用法示例", BasicThread::async_demo},
+      {"std::call_once", "std::call_once的用法示例",
        BasicThread::call_once_demo},
-      {"", "使用C++11提供的线程接口以及一些其它的设施，实现一个简单的线程池",
-       BasicThread::thread_pool_demo}};
-  op::Category factory("Choose a question:", ops);
+      {"Create a simple thread pool", "使用C++11提供的线程接口以及一些其它的设施，实现一个简单的线程池",
+       ThreadAvanced::thread_pool_demo}};
+  op::Category factory("线程相关的知识点:", ops);
   factory.addGoBackOp();
   factory.execute();
 }
 
-auto ThreadUsage::BasicThread::thread_demo() -> void {
+auto thread_usage::BasicThread::thread_demo() -> void {
   std::cout << __FUNCTION__ << "thread id:" << std::this_thread::get_id
             << std::endl;
   std::thread thread1([] {
@@ -148,7 +143,7 @@ void testUniqueLock() {
 }
 
 }  // namespace mutex_lock_utility
-auto ThreadUsage::BasicThread::mutex_lock_demo() -> void {
+auto thread_usage::BasicThread::mutex_lock_demo() -> void {
   mutex_lock_utility::testMutex();
 
   mutex_lock_utility::testTryLock();
@@ -158,7 +153,7 @@ auto ThreadUsage::BasicThread::mutex_lock_demo() -> void {
   mutex_lock_utility::testUniqueLock();
 }
 
-auto ThreadUsage::BasicThread::condition_variable_demo() -> void {
+auto thread_usage::BasicThread::condition_variable_demo() -> void {
   std::mutex m;
   std::string data;
   std::condition_variable cv;
@@ -207,7 +202,7 @@ auto ThreadUsage::BasicThread::condition_variable_demo() -> void {
   worker.join();
 }
 
-auto ThreadUsage::BasicThread::promise_demo() -> void {
+auto thread_usage::BasicThread::promise_demo() -> void {
   auto accumulate = [](std::vector<int>::iterator first,
                        std::vector<int>::iterator last,
                        std::promise<int> accumulate_promise) {
@@ -267,7 +262,7 @@ void task_bind() {
 void task_thread() {
   std::packaged_task<int(int, int)> task(f);
   std::future<int> result = task.get_future();
- 
+
   std::thread task_td(std::move(task), 2, 7);
   task_td.join();
 
@@ -275,7 +270,7 @@ void task_thread() {
 }
 }  // namespace package_task_utility
 
-auto ThreadUsage::BasicThread::packaged_task_demo() -> void {
+auto thread_usage::BasicThread::packaged_task_demo() -> void {
   package_task_utility::task_lambda();
   package_task_utility::task_bind();
   package_task_utility::task_thread();
@@ -316,7 +311,7 @@ int parallel_sum(RandomIt beg, RandomIt end) {
 }
 }  // namespace async_utility
 
-auto ThreadUsage::BasicThread::async_demo() -> void {
+auto thread_usage::BasicThread::async_demo() -> void {
   using namespace async_utility;
   std::vector<int> v(10000, 1);
   std::cout << "The sum is:"
@@ -361,7 +356,7 @@ void do_once(bool do_throw) {
 }
 }  // namespace call_once_utility
 
-auto ThreadUsage::BasicThread::call_once_demo() -> void {
+auto thread_usage::BasicThread::call_once_demo() -> void {
   using namespace call_once_utility;
   std::thread st1(simple_do_once);
   std::thread st2(simple_do_once);
@@ -382,7 +377,103 @@ auto ThreadUsage::BasicThread::call_once_demo() -> void {
   t4.join();
 }
 
-auto ThreadUsage::BasicThread::thread_pool_demo() -> void {
-  std::cout << "A:" << std::endl;
+namespace thread_pool_utility {
+void fun1(int mills) {
+  std::cout << "  hello, fun1 !  " << std::this_thread::get_id() << "\n";
+  if (mills > 0) {
+    std::cout << " ======= fun1 sleep " << mills
+              << "  =========  " << std::this_thread::get_id() << std::endl;
+    std::this_thread::sleep_for(std::chrono::milliseconds(mills));
+  }
+}
 
+struct gfun {
+  int operator()(int n) {
+    std::cout << n << "  hello, gfun !  " << std::this_thread::get_id()
+              << std::endl;
+    return 42;
+  }
+};
+
+class A {
+ public:
+  static int Afun(int n = 0) {
+    std::cout << n << "  hello, Afun !  " << std::this_thread::get_id()
+              << std::endl;
+    return n;
+  }
+
+  static std::string Bfun(int n, std::string str, char c) {
+    std::cout << n << "  hello, Bfun !  " << str.c_str() << "  " << (int)c
+              << "  " << std::this_thread::get_id() << std::endl;
+    return str;
+  }
+};
+
+}  // namespace thread_pool_utility
+
+auto thread_usage::ThreadAvanced::thread_pool_demo() -> void {
+  using namespace thread_pool_utility;
+  try {
+    ThreadPool1 executor{50};
+    A a;
+    auto ff = executor.commit(fun1, 0);
+    auto fg = executor.commit(gfun{}, 0);
+    auto gg = executor.commit(a.Afun, 9999);
+    auto gh = executor.commit(A::Bfun, 9998, "mult args", 123);
+    auto fh = executor.commit([]() -> std::string {
+      std::cout << "hello, fh !  " << std::this_thread::get_id() << std::endl;
+      return "hello,fh ret !";
+    });
+
+    std::cout << " =======  sleep ========= " << std::this_thread::get_id()
+              << std::endl;
+    std::this_thread::sleep_for(std::chrono::microseconds(900));
+
+    for (int i = 0; i < 50; i++) {
+      executor.commit(fun1, i * 100);
+    }
+    std::cout << " =======  commit all ========= " << std::this_thread::get_id()
+              << " idlsize=" << executor.idlCount() << std::endl;
+
+    std::cout << " =======  sleep ========= " << std::this_thread::get_id()
+              << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+
+    ff.get();
+    std::cout << fg.get() << "  " << fh.get().c_str() << "  "
+              << std::this_thread::get_id() << std::endl;
+
+    std::cout << " =======  sleep ========= " << std::this_thread::get_id()
+              << std::endl;
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+
+    std::cout << " =======  fun1,55 ========= " << std::this_thread::get_id()
+              << std::endl;
+    executor.commit(fun1, 55).get();  // 调用.get()获取返回值会等待线程执行完
+
+    std::cout << "end... " << std::this_thread::get_id() << std::endl;
+
+    ThreadPool1 pool(4);
+    std::vector<std::future<int> > results;
+
+    for (int i = 0; i < 8; ++i) {
+      results.emplace_back(pool.commit([i] {
+        std::cout << "hello " << i << std::endl;
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::cout << "world " << i << std::endl;
+        return i * i;
+      }));
+    }
+    std::cout << " =======  commit all2 ========= "
+              << std::this_thread::get_id() << std::endl;
+
+    for (auto&& result : results) {
+      std::cout << result.get() << ' ';
+    }
+    std::cout << std::endl;
+  } catch (std::exception& e) {
+    std::cout << "some unhappy happened...  " << std::this_thread::get_id()
+              << e.what() << std::endl;
+  }
 }

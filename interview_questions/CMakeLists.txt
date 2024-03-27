@@ -1,17 +1,18 @@
 set (CMAKE_CXX_STANDARD 17)
 set(target_name interview_questions)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-set(source_files 
-main.cpp
-utils.cpp
-BasicAndClassic.cpp
-ThreadUsage.cpp
-thread_pool.cpp)
+set(all_srcs 
+	main.cpp
+	utils.cpp
+	utils.h
+	basic_and_classic/BasicAndClassic.cpp
+	basic_and_classic/BasicAndClassic.h
+	thread_usage/ThreadUsage.cpp
+	thread_usage/ThreadUsage.hpp
+	design_pattern/DesignPattern.cpp
+	design_pattern/DesignPattern.h)
 
-set(header_files 
-utils.h
-BasicAndClassic.h
-ThreadUsage.h
-thread_pool.hpp)
+message("sb " + ${all_srcs})
 
-add_executable(${target_name} ${source_files} ${header_files})
+add_executable(${target_name} ${all_srcs})

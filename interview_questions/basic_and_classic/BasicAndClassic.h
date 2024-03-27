@@ -1,30 +1,40 @@
 #pragma once
 /*
-* C/C++ 基础面试题，对于应届生来说最常见的问题
+* C/C++ 基础
 */
 
 #include <string>
 #include <iostream>
 
-#include "utils.h"
-
-namespace BasicAndClassic {
+namespace basic_and_classic {
 void execute();
 
+/// <summary>
+/// 内存相关的
+/// </summary>
 struct Memory {
   static void memDist();
   static void mallocNewDiff();
 };
 
+/// <summary>
+/// Static 关键字
+/// </summary>
 struct StaticKeyword {
   void operator()();
 };
 
+/// <summary>
+/// 类的创建和拷贝
+/// </summary>
 struct CppCopyAssignDestoy {
   static void lRef_rRef();
   static void _3_5_rules();
 };
 
+/// <summary>
+/// 类型转换
+/// </summary>
 struct CastInCpp {
   static auto describeCastInCpp() -> void;
 };
