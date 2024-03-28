@@ -18,6 +18,4 @@ set(all_srcs
 	design_pattern/creational_patterns/singleton.hpp
 	design_pattern/creational_patterns/prototype_or_clone.hpp)
 
-message("sb " + ${all_srcs})
-
 add_executable(${target_name} ${all_srcs})
