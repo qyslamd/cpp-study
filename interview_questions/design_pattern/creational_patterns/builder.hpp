@@ -73,13 +73,6 @@ struct ConcreteBuilder1 : Builder {
    * client code before disposing of the previous result.
    */
 
-  /**
-   * Please be careful here with the memory ownership. Once you call
-   * GetProduct the user of this function is responsable to release this
-   * memory. Here could be a better option to use smart pointers to avoid
-   * memory leaks
-   */
-
   std::shared_ptr<Product1> GetProduct() {
     auto result =  this->product;
     this->Reset();
@@ -94,9 +87,6 @@ struct ConcreteBuilder1 : Builder {
  * optional, since the client can control builders directly.
  */
 struct Director {
-  /**
-   * @var Builder
-   */
  private:
   std::shared_ptr<Builder> builder;
   /**
@@ -114,7 +104,6 @@ struct Director {
    * The Director can construct several product variations using the same
    * building steps.
    */
-
   void BuildMinimalViableProduct() { this->builder->ProducePartA(); }
 
   void BuildFullFeaturedProduct() {
