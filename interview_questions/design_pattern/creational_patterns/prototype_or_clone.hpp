@@ -58,4 +58,7 @@ struct Circle {
 
 };
 
+struct App {
+  static void execute() {}
+};
 }

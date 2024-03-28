@@ -8,6 +8,7 @@
 #include "creational_patterns/factory_method.hpp"
 #include "creational_patterns/builder.hpp"
 #include "creational_patterns/singleton.hpp"
+#include "creational_patterns/prototype_or_clone.hpp"
 
 void design_patterns::execute() {
   std::vector<op::Question> ops{
@@ -91,7 +92,9 @@ auto design_patterns::CreationalPatterns::showCategory() -> void {
       {"[Creational Patterns] --- Builder", "创建型模式-生成器模式",
        builder_demo::App::execute},
       {"[Creational Patterns] --- Singleton", "创建型模式-单例模式",
-       singleton_demo::App::execute}};
+       singleton_demo::App::execute},
+      {"[Creational Patterns] --- Prototype", "创建型模式-原型模式",
+       prototype_demo::App::execute}};
   op::Category category("输入一个数字，选择设计模式相关的知识点并执行它：", ops);
   category.addGoBackOp();
   category.execute();
