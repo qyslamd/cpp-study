@@ -5,8 +5,10 @@
 #include <vector>
 
 namespace builder_demo {
+
 struct Product1 {
   std::vector<std::string> parts_;
+
   void ListParts() const {
     std::cout << "Product parts: ";
     for (size_t i = 0; i < parts_.size(); i++) {
@@ -28,7 +30,7 @@ struct Builder {
 
 struct ConcreteBuilder1 : Builder {
  private:
-  Product1* product;
+  std::shared_ptr<Product1> product;
 
   /**
    * A fresh builder instance should contain a blank product object, which is
@@ -37,23 +39,21 @@ struct ConcreteBuilder1 : Builder {
  public:
   ConcreteBuilder1() { this->Reset(); }
 
-  ~ConcreteBuilder1() { delete product; }
-
-  void Reset() { this->product = new Product1(); }
+  void Reset() { this->product.reset(new Product1); }
   /**
    * All production steps work with the same product instance.
    */
 
   void ProducePartA() const override {
-    this->product->parts_.push_back("PartA1");
+    product->parts_.push_back("PartA1");
   }
 
   void ProducePartB() const override {
-    this->product->parts_.push_back("PartB1");
+    product->parts_.push_back("PartB1");
   }
 
   void ProducePartC() const override {
-    this->product->parts_.push_back("PartC1");
+    product->parts_.push_back("PartC1");
   }
 
   /**
@@ -80,8 +80,8 @@ struct ConcreteBuilder1 : Builder {
    * memory leaks
    */
 
-  Product1* GetProduct() {
-    Product1* result = this->product;
+  std::shared_ptr<Product1> GetProduct() {
+    auto result =  this->product;
     this->Reset();
     return result;
   }
@@ -98,7 +98,7 @@ struct Director {
    * @var Builder
    */
  private:
-  Builder* builder;
+  std::shared_ptr<Builder> builder;
   /**
    * The Director works with any builder instance that the client code passes
    * to it. This way, the client code may alter the final type of the newly
@@ -106,7 +106,9 @@ struct Director {
    */
 
  public:
-  void set_builder(Builder* builder) { this->builder = builder; }
+  void set_builder(std::shared_ptr<Builder> builder) {
+    this->builder = builder;
+  }
 
   /**
    * The Director can construct several product variations using the same
@@ -133,21 +135,19 @@ struct Director {
 
 struct Client {
   void operator()(Director& director) {
-    ConcreteBuilder1* builder = new ConcreteBuilder1();
+    std::shared_ptr<ConcreteBuilder1> builder(new ConcreteBuilder1);
     director.set_builder(builder);
     std::cout << "Standard basic product:\n";
     director.BuildMinimalViableProduct();
 
-    Product1* p = builder->GetProduct();
+    std::shared_ptr<Product1> p = builder->GetProduct();
     p->ListParts();
-    delete p;
 
     std::cout << "Standard full featured product:\n";
     director.BuildFullFeaturedProduct();
 
     p = builder->GetProduct();
     p->ListParts();
-    delete p;
 
     // Remember, the Builder pattern can be used without a Director class.
     std::cout << "Custom product:\n";
@@ -155,8 +155,6 @@ struct Client {
     builder->ProducePartC();
     p = builder->GetProduct();
     p->ListParts();
-    delete p;
-    delete builder;
   }
 };
 

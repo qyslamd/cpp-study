@@ -14,7 +14,8 @@ set(all_srcs
 	design_pattern/DesignPattern.h
 	design_pattern/creational_patterns/abstract_factory.hpp
 	design_pattern/creational_patterns/factory_method.hpp
-	design_pattern/creational_patterns/builder.hpp)
+	design_pattern/creational_patterns/builder.hpp
+	design_pattern/creational_patterns/singleton.hpp)
 
 message("sb " + ${all_srcs})
 
