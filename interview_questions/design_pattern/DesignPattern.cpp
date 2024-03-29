@@ -10,11 +10,14 @@
 #include "creational_patterns/singleton.hpp"
 #include "creational_patterns/prototype_or_clone.hpp"
 
+#include "structual_patterns/adapter.hpp"
+
 void design_patterns::execute() {
   std::vector<op::Question> ops{
       {"What's SOLID principles?", "设计模式的五大原则是什么？",
        SOLID::description},
-      {"Creational patterns", "创建型模式", CreationalPatterns::showCategory}};
+      {"Creational patterns", "创建型模式", CreationalPatterns::showCategory},
+      {"Structual patterns", "结构型模式", StructualPatterns::showCategory}};
   op::Category factory("输入一个数字，选择设计模式相关的知识点并执行它：", ops);
   factory.addGoBackOp();
   factory.execute();
@@ -96,6 +99,15 @@ auto design_patterns::CreationalPatterns::showCategory() -> void {
       {"[Creational Patterns] --- Prototype", "创建型模式-原型模式",
        prototype_demo::App::execute}};
   op::Category category("输入一个数字，选择设计模式相关的知识点并执行它：", ops);
+  category.addGoBackOp();
+  category.execute();
+}
+
+auto design_patterns::StructualPatterns::showCategory() -> void {
+  std::vector<op::Question> ops{{"[Structual Patterns] --- Adapter",
+                                 "结构型模式-适配器模式",
+                                 adapter_demo::App::execute}};
+  op::Category category("根据数字提示，选择你要执行的功能", ops);
   category.addGoBackOp();
   category.execute();
 }

@@ -51,4 +51,8 @@ struct CreationalPatterns {
   static auto showCategory() -> void;
 };
 
+struct StructualPatterns {
+  static auto showCategory() -> void;
+};
+
 }  // namespace design_patterns
