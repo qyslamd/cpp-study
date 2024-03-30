@@ -11,6 +11,9 @@
 #include "creational_patterns/prototype_or_clone.hpp"
 
 #include "structual_patterns/adapter.hpp"
+#include "structual_patterns/bridge.hpp"
+#include "structual_patterns/composite.hpp"
+#include "structual_patterns/decorator.hpp"
 
 void design_patterns::execute() {
   std::vector<op::Question> ops{
@@ -104,9 +107,15 @@ auto design_patterns::CreationalPatterns::showCategory() -> void {
 }
 
 auto design_patterns::StructualPatterns::showCategory() -> void {
-  std::vector<op::Question> ops{{"[Structual Patterns] --- Adapter",
-                                 "结构型模式-适配器模式",
-                                 adapter_demo::App::execute}};
+  std::vector<op::Question> ops{
+      {"[Structual Patterns] --- Adapter", "结构型模式-适配器模式",
+       adapter_demo::App::execute},
+      {"[Structual Patterns] --- Bridge", "结构型模式-桥接模式",
+       bridge_demo::App::execute},
+      {"[Structual Patterns] --- Composite", "结构型模式-组合模式",
+       composite_demo::App::execute},
+      {"[Structual Patterns] --- Decorator", "结构型模式-装饰模式",
+       decorator_demo::App::execute}};
   op::Category category("根据数字提示，选择你要执行的功能", ops);
   category.addGoBackOp();
   category.execute();
