@@ -8,6 +8,8 @@ set(all_srcs
 	utils.h
 	basic_and_classic/BasicAndClassic.cpp
 	basic_and_classic/BasicAndClassic.h
+	pointers/pointers_basic.cpp
+	pointers/pointers_basic.h
 	thread_usage/ThreadUsage.cpp
 	thread_usage/ThreadUsage.hpp
 	design_pattern/DesignPattern.cpp

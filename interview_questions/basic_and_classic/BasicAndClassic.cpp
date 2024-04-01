@@ -4,6 +4,8 @@
 #include "BasicAndClassic.h"
 #include <sstream>
 #include <iostream>
+#include <memory>
+
 #include "utils.h"
 
 using namespace std;
@@ -18,7 +20,9 @@ void basic_and_classic::execute() {
       {"What's rules of three/five?", "C++中的3/5法则以及0法则",
        CppCopyAssignDestoy::_3_5_rules},
       {"Describe the explicit type conversion keyword in C++",
-       "描述C++中的显式类型转换关键字", CastInCpp::describeCastInCpp}};
+       "描述C++中的显式类型转换关键字", CastInCpp::describeCastInCpp},
+      {"Write a string class", "自己写一个String类",
+       CppCopyAssignDestoy::testMyString}};
   op::Category factory("选择一个基础的问题或者命令，数字代表执行它", ops);
   factory.addGoBackOp();
   factory.execute();
@@ -194,47 +198,6 @@ void basic_and_classic::CppCopyAssignDestoy::_3_5_rules() {
   std::cout << ss.str() << std::endl;
 }
 
-namespace my_string_utility {
-class MyString {
- public:
-  MyString() : data(nullptr), size(0) {}
-  ~MyString() {
-    delete[] data;
-    size = 0;
-  }
-
-  MyString(const char* str) {
-    if (!str) {
-      data = new char[1];
-      data[0] = '\0';
-      size = 0;
-    }
-    else {
-      size = strlen(str);
-      data = new char[size + 1];
-      memcpy(data, str, size);
-      data[size] = '\0';
-    }
-  }
-  
-  MyString(const MyString& other) {
-
-  
-  }
-  MyString& operator=(const MyString& other) {}
-  MyString(MyString&& other) {
-  
-  }
-  MyString& operator=(MyString&& other) noexcept {}
-
- private:
-  char* data;
-  size_t size;
-};
-}  // namespace my_string_utility
-
-auto basic_and_classic::CppCopyAssignDestoy::testMyString() -> void {}
-
 class Foo {
  private:
   size_t size;
@@ -318,4 +281,261 @@ auto basic_and_classic::CastInCpp::describeCastInCpp() -> void {
 
   std::stringstream ss;
   std::cout << ss.str() << std::endl;
+}
+
+namespace basic_and_classic {
+String::String() : data_(nullptr), size_(0) {
+  std::cout << "Default constructor was called." << std::endl;
+}
+
+String::~String() {
+  std::cout << "Destructor was called." << std::endl;
+  delete[] data_;
+}
+
+String::String(const char* str) {
+  std::cout << "Const char * constructor was called." << std::endl;
+
+  if (!str) {
+    data_ = new char[1];
+    data_[0] = '\0';
+    size_ = 0;
+  } else {
+    size_ = strlen(str);
+    data_ = new char[size_ + 1];
+    memcpy(data_, str, size_);
+    data_[size_] = '\0';
+
+    // also can use strcpy.
+    // strcpy() copies the null-terminated byte string pointed to by src,
+    // including the null terminator
+    // strcpy(data, str);
+  }
+}
+
+String::String(const String& other) noexcept{
+  std::cout << "Copy constructor was called." << std::endl;
+
+  size_ = other.size_;
+  data_ = new char[size_ + 1];
+  strcpy(data_, other.data_);
+}
+
+String& String::operator=(const String& other) {
+  std::cout << "Copy assign operator was called." << std::endl;
+
+  if (this == &other) {
+    return *this;
+  }
+
+  delete[] data_;
+  size_ = other.size_;
+  data_ = new char[size_ + sizeof(char)];
+  strcpy(data_, other.data_);
+
+  return *this;
+}
+
+char& String::operator[](int i) {
+  return data_[i];
+}
+
+const char& String::operator[](int i) const {
+  return data_[i];
+}
+
+String String::operator+(const String& str) const {
+  if (str.empty()) {
+    return *this;
+  }
+
+  auto N = strlen(this->data_) + strlen(str.data_);
+  char* buf = new char[N + 1];
+  strcpy(buf, this->data_);
+  strcat(buf, str.data_);
+
+  return String(buf);
+}
+
+String String::operator+(const char* str) const{
+  if (!str) {
+    return *this;
+  }
+
+  auto N = strlen(this->data_) + strlen(str);
+  char* buf = new char[N + 1];
+  strcpy(buf, this->data_);
+  strcat(buf, str);
+
+  return String(buf);
+}
+
+String::String(String&& other) noexcept {
+  std::cout << "Move constructor was called." << std::endl;
+
+  this->size_ = other.size_;
+  this->data_ = other.data_;
+
+  other.size_ = 0;
+  other.data_ = nullptr;
+}
+
+String::String(const std::string& str) {
+  auto temp = str.c_str();
+  this->size_ = strlen(temp);
+  this->data_ = new char[this->size_ + 1];
+  strcpy(this->data_, temp);
+}
+
+String& String::operator=(String&& other) noexcept {
+  std::cout << "Move assign operator was called." << std::endl;
+
+  if (this == &other) {
+    return *this;
+  }
+
+  delete[] this->data_;
+  this->size_ = other.size_;
+  this->data_ = other.data_;
+
+  other.size_ = 0;
+  other.data_ = nullptr;
+  return *this;
+}
+
+bool basic_and_classic::operator<(const String& st1, const String& st2) {
+  return (std::strcmp(st1.data_, st2.data_) < 0);
+}
+
+bool basic_and_classic::operator>(const String& st1, const String& st2) {
+  return st2 < st1;
+}
+
+bool basic_and_classic::operator==(const String& st1, const String& st2) {
+  return (std::strcmp(st1.data_, st2.data_) == 0);
+}
+
+bool operator==(const String& st, const char* st2) {
+  return (strcmp(st.data_, st2) == 0);
+}
+
+std::ostream& operator<<(std::ostream& os, const String& st) {
+  if (st.data_) {
+    os << st.data_;
+  }
+  return os;
+}
+
+std::istream& operator>>(std::istream& is, String& st) {
+  std::string temp;
+  std::cin >> temp;
+  st = String(temp);
+  return is;
+}
+
+bool String::empty() const {
+  return size_ == 0;
+}
+
+int String::length() const {
+  return size_;
+}
+
+int String::size() const {
+  return length();
+}
+
+String& String::append(const String& other) {
+  if (other.empty()) {
+    return *this;
+  }
+  auto N = this->size_ + other.size_;
+  char* buff = new char[N + 1];
+  strcpy(buff, this->data_);
+  strcat(buff, other.data_);
+  delete[] this->data_;
+  this->data_ = buff;
+  this->size_ = N;
+
+  return *this;
+}
+
+String& String::append(const char* str) {
+  if (!str) {
+    return *this;
+  }
+  auto N = this->size_ + strlen(str);
+  char* buff = new char[N + 1];
+  strcpy(buff, this->data_);
+  strcat(buff, str);
+  delete[] this->data_;
+  this->data_ = buff;
+  this->size_ = N;
+
+  return *this;
+}
+
+void String::clear() {
+  delete[] data_;
+  data_ = nullptr;
+  size_ = 0;
+}
+
+char* String::data() const {
+  return data_;
+}
+
+char* String::c_str() const {
+  return data_;
+}
+
+}  // namespace basic_and_classic
+
+auto basic_and_classic::CppCopyAssignDestoy::testMyString() -> void {
+  if (0) {
+    std::shared_ptr<String> str(new String);
+    std::cout << *str << std::endl;
+  }
+
+  if (0) {
+    String str("today is a good day.");
+    std::cout << "s2 is : " << str << "size is: " << str.size() << std::endl;
+  }
+
+  if(0){
+    String str1 = "hello,world";  // constructor --- String(const char*).
+    // 等号左边的对象还未创建，所以调用拷贝构造。
+    String str2 = str1;  // copy constructor --- String(const String &&).
+
+    String str3 = std::move(str2);  // move constructor. --- String(String&& ).
+
+    String str4;
+    str4 = std::move(
+        str3);  // move assign operator --- (String& operator=(String &&).
+  }
+
+  if(0){
+    String str1("A"), str2("B");
+    String str3 = str1 + str2;
+    String str4 = str1 + "ambition";
+    std::cout << "str1:" << str1 << std::endl;
+    std::cout << "str2:" << str2 << std::endl;
+    std::cout << "str3:" << str3 << std::endl;
+    std::cout << "str4:" << str4 << std::endl;
+  }
+
+  if (0) {
+    String str1("test");
+    str1.append(" 001");
+    String str2 = str1 + "chuanqi";
+    std::cout << "str1:" << str1 << std::endl;
+    std::cout << "str2:" << str2 << std::endl;
+  }
+
+  if (1) {
+    std::cout << "Input a string:" << std::endl;
+    String str;
+    std::cin >> str;
+    std::cout << "str: " << str << std::endl;
+  }
 }
