@@ -30,6 +30,11 @@ struct StaticKeyword {
 struct CppCopyAssignDestoy {
   static void lRef_rRef();
   static void _3_5_rules();
+  /// <summary>
+  /// øº≤Ï…ÓøΩ±¥∫Õ«≥øΩ±¥
+  /// </summary>
+  /// <returns></returns>
+  static auto testMyString() -> void;
 };
 
 /// <summary>

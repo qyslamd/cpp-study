@@ -194,6 +194,47 @@ void basic_and_classic::CppCopyAssignDestoy::_3_5_rules() {
   std::cout << ss.str() << std::endl;
 }
 
+namespace my_string_utility {
+class MyString {
+ public:
+  MyString() : data(nullptr), size(0) {}
+  ~MyString() {
+    delete[] data;
+    size = 0;
+  }
+
+  MyString(const char* str) {
+    if (!str) {
+      data = new char[1];
+      data[0] = '\0';
+      size = 0;
+    }
+    else {
+      size = strlen(str);
+      data = new char[size + 1];
+      memcpy(data, str, size);
+      data[size] = '\0';
+    }
+  }
+  
+  MyString(const MyString& other) {
+
+  
+  }
+  MyString& operator=(const MyString& other) {}
+  MyString(MyString&& other) {
+  
+  }
+  MyString& operator=(MyString&& other) noexcept {}
+
+ private:
+  char* data;
+  size_t size;
+};
+}  // namespace my_string_utility
+
+auto basic_and_classic::CppCopyAssignDestoy::testMyString() -> void {}
+
 class Foo {
  private:
   size_t size;
