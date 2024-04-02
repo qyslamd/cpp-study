@@ -66,6 +66,14 @@ void basic_and_classic::Memory::mallocNewDiff() {
   std::cout << ss.str() << std::endl;
 }
 
+void basic_and_classic::Memory::smartPointers() {
+  std::cout << "这里就简单记录下C++11中提供的智能指针的用法。" << std::endl;
+
+  std::stringstream ss;
+
+  std::cout << ss.str() << std::endl;
+}
+
 void basic_and_classic::StaticKeyword::operator()() {
   std::cout << "Q:static关键字在C++中有哪些用法？" << std::endl;
 #ifdef _WINDOWS

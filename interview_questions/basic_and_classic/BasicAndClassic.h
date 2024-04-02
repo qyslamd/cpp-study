@@ -15,6 +15,7 @@ void execute();
 struct Memory {
   static void memDist();
   static void mallocNewDiff();
+  static void smartPointers();
 };
 
 /// <summary>
