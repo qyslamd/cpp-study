@@ -18,7 +18,6 @@ class Category {
   void addGoBackOp();
   void execute();
   inline void quit() { running = false; }
-
  private:
   inline std::string op2Str(int cmd, const Question& op) {
     return std::to_string(cmd) + ": " + op.desc + "(" + op.zh_CN_desc + ")";

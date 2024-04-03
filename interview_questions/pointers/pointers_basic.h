@@ -8,7 +8,7 @@ void execute();
 
 
 /// <summary>
-/// 复习复习C/C++一维指针或者一维数组
+/// C/C++ 一维数组及指针的常见操作
 /// </summary>
 struct _1DArray {
   static void test1();

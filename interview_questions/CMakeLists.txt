@@ -19,5 +19,9 @@ set(all_srcs
 	design_pattern/creational_patterns/builder.hpp
 	design_pattern/creational_patterns/singleton.hpp
 	design_pattern/creational_patterns/prototype_or_clone.hpp
-	design_pattern/structual_patterns/adapter.hpp)
+	design_pattern/structual_patterns/adapter.hpp
+	data_structure_and_algorithms/data_structure_algorithm.cpp
+	data_structure_and_algorithms/data_structure_algorithm.h
+	data_structure_and_algorithms/queue/array_make_queue.cpp
+	data_structure_and_algorithms/queue/array_make_queue.h)
 add_executable(${target_name} ${all_srcs})

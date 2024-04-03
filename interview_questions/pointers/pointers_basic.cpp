@@ -10,9 +10,8 @@
 #include <iostream>
 
 void pointer_basic ::execute() {
-  std::vector<op::Question> ops{
-      {"Pointer to an array.", "二维数组", _2DimArray}};
-  op::Category factory("选择一个基础的问题或者命令，数字代表执行它", ops);
+  op::Category factory("选择一个基础的问题或者命令，数字代表执行它",
+                       {{"Pointer to an array.", "二维数组", _2DimArray}});
   factory.addGoBackOp();
   factory.execute();
 }
@@ -146,16 +145,21 @@ void pointer_basic::_2DArrayPassParam::test() {
   ss << std::endl;
 
   ss << "二维数组作为函数参数的传递方式：\n";
-  ss << "1. void func(int array[][5]); // 最直接方式,且第二维必须显式指定!!!\n\n";
+  ss << "1. void func(int array[][5]); // "
+        "最直接方式,且第二维必须显式指定!!!\n\n";
   ss << "2. void func(int (*arr)[5]);  // "
         "传递数组指针，即二维数组首地址，且第二维必须显式指定!!!\n\n";
-  ss << "3. void func(int **arr, const int cow, const int "
+  ss << "3. void func(int **arr, int row, int "
         "column);  // 使用指向指针的指针: 假设二维数组是 int "
-        "arr[2][3]，那么调用的时候得: func((int**)arr, 2, 3); 寻址：*((int *)arr +i*n +j )//n表示第二维数组长度,即列宽"
-     << "\n\n";
+        "arr[2][3]，那么调用的时候得: func((int**)arr, 2, 3); 寻址：*((int "
+        "*)arr +i*n +j )//n表示第二维数组长度,即列宽\n\n";
+  ss << "4. void func(int *arr, int row, int col);  // "
+        "使用一维指针。使用起来和3差不多，但是只能是数组，实际传入参数不能为int"
+        " **在堆上new或者malloc出来的\n\n";
+  ss << std::endl;
 
-  #ifdef _WINDOWS
+#ifdef _WINDOWS
   system("cls");
-  #endif
+#endif
   std::cout << ss.str() << "\n\n";
 }
