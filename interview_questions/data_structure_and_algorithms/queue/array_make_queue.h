@@ -25,7 +25,7 @@ class StaticArrayQueue {
     }
     // ¶ÓÎ²·ÅÖÃÔªËØ
     data_array[rear_++] = t;
-    count += 1;
+    count_ += 1;
     return true;
   }
 
@@ -34,7 +34,7 @@ class StaticArrayQueue {
       return T{};
     }
     auto const t = data_array[front_++];
-    count -= 1;
+    count_ -= 1;
     return t;
   }
 

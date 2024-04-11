@@ -4,6 +4,7 @@
 #include <vector>
 #include <sstream>
 
+#include "creational_patterns/simple_factory.hpp"
 #include "creational_patterns/abstract_factory.hpp"
 #include "creational_patterns/factory_method.hpp"
 #include "creational_patterns/builder.hpp"
@@ -91,6 +92,8 @@ std::string design_patterns::SOLID::DI() {
 
 auto design_patterns::CreationalPatterns::showCategory() -> void {
   std::vector<op::Question> ops{
+      {"[Creational Patterns] --- Simple Factory", "创建型模式-简单工厂",
+       simple_factory_demo::Client::test},
       {"[Creational Patterns] --- Asbtract Factory", "创建型模式-抽象工厂",
        abstract_factory_demo::App::execute},
       {"[Creational Patterns] --- Factory Method", "创建型模式-工厂方法",
